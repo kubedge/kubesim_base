@@ -31,8 +31,8 @@ jobs:
       - cd ..
 #   - stage: build python docker image
 #     script:
-#     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-dev
-#     - export VERSION=0.1.0
+#     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-amd64
+#     - export VERSION=0.1.9
 #     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 #     - docker build -t $DBLUETOOTHREPO:$VERSION -f images/bluetooth_detect/Dockerfile .
 #     - docker images
@@ -44,12 +44,12 @@ jobs:
       - sudo apt-get update
       - sudo apt-get install -y libpcap-dev
       script:
-      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-dev
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-amd64
       - export VERSION=0.1.11
       - cd health/
-      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/bin/healthsrv -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/amd64/healthsrv -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t $DHEALTHREPO:$VERSION -f build/Dockerfile .
+      - docker build -t $DHEALTHREPO:$VERSION -f build/Dockerfile.amd64 .
       - cd ..
       - docker images
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
@@ -60,7 +60,7 @@ jobs:
       - sudo apt-get update
       - sudo apt-get install -y libpcap-dev
       script:
-      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-dev
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-amd64
       - export VERSION=0.1.11
       - docker run -d --name test_base $DHEALTHREPO:$VERSION
       - docker ps | grep -q test_base
