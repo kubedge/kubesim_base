@@ -1,0 +1,27 @@
+// A simple grpc proto to demo the 5G network use case
+syntax = "proto3";
+
+package kubedge;
+
+// The greeting service definition.
+service Kubedge {
+  // Sends a message
+  rpc FiveGDemo(EnodeRequest) returns (EPCReply) {}
+  rpc DetectNW(UERequest) returns (EPCReply) {}
+}
+
+// The request message containing the protocol name.
+message EnodeRequest {
+  string protocol = 1;
+}
+
+//The response message containing the protocol or network
+message EPCReply {
+  string message = 1;
+}
+
+//This is for request from UE ( bluetooth/wifi )
+message UERequest {
+  string network = 1;
+}
+
