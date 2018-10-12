@@ -10,7 +10,7 @@ import (
 )
 
 const (
-        address     = "localhost:50051"
+        address     = "172.17.0.2:50051"
         defaultNetwork = "Bluetooth"
         defaultProtocol = "X1000001"
 )

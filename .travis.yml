@@ -14,12 +14,21 @@ jobs:
       script:
       - export DHUBREPO=$DOCKER_NAMESPACE/kubesim_base-arm32v7
       - export VERSION=0.1.0
-      - cd kubesim_base
+      - cd grpc/go/kubedge_server/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goserv .
-      - cd ..
+      - cd ../../../grpc/go/kubedge_client/
+      - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o goclient .
       - docker run --rm --privileged multiarch/qemu-user-static:register --reset
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t $DHUBREPO:$VERSION -f images/kubesim_base/Dockerfile .
+      - docker images
+      - docker tag $DHUBREPO:$VERSION $DHUBREPO:latest
+      - docker tag $DHUBREPO:$VERSION $DHUBREPO:travis-$TRAVIS_BUILD_NUMBER
+      - docker push $DHUBREPO
     - stage: test
       script:
       - export DHUBREPO=$DOCKER_NAMESPACE/kubesim_base-arm32v7
       - export VERSION=0.1.0
+      - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+      - docker run -d --name test_base $DHUBREPO:$VERSION
+      - docker ps | grep -q test_base
