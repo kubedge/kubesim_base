@@ -1,4 +1,5 @@
 import bluetooth, time
+import subprocess
 
 search_time = 10
 addr = None
@@ -23,7 +24,7 @@ while True:
             print("Got {} in Bluetooth coverage, " \
                   "will go sleep for sometime".format(name))
             match=True
-            subprocess.call('/goclient network Bluetooth')
+            subprocess.call(['/goclient','network','Bluetooth'])
     if not match:
         print("Still waiting for someone from our team to " \
             "come in bluetooth coverage area")

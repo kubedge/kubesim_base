@@ -21,7 +21,7 @@ while True:
         for line in data:
             if name in line:
                 print("Got {} in Wifi coverage".format(name))
-                subprocess.call('/goclient network WIFI')
+                subprocess.call(['/goclient','network','WIFI'])
                 match=True
 
     if not match:
