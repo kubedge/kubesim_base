@@ -17,8 +17,9 @@ jobs:
       - cd grpc/go/kubedge_server/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goserv .
       - cd ../../../grpc/go/kubedge_client/
-      - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o goclient .
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
       - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+      - cd ../../../         
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - docker build -t $DHUBREPO:$VERSION -f images/kubesim_base/Dockerfile .
       - docker images
