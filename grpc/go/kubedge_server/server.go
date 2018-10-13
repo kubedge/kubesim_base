@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
         "log"
@@ -24,7 +24,8 @@ func (s *kubedgeserver) DetectNW(ctx context.Context, in *pb.UERequest) (*pb.EPC
 	return &pb.EPCReply{Message: in.Network +  ":: is the mode of connection"}, nil
 }
 
-func main() {
+func Server() {
+        log.Printf("server is running")
         lis, err := net.Listen("tcp", port)
         if err != nil {
                 log.Fatalf("failed to listen: %v", err)
@@ -35,5 +36,6 @@ func main() {
         if err := s.Serve(lis); err != nil {
                 log.Fatalf("failed to serve: %v", err)
         }
+        log.Fatalf("server is exiting", err)
 }
 

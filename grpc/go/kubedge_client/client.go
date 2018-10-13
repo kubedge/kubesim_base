@@ -1,8 +1,7 @@
-package main
+package client
 
 import (
         "log"
-        "os"
         "time"
         "golang.org/x/net/context"
         "google.golang.org/grpc"
@@ -19,7 +18,9 @@ const (
 	defaultDemo = "protocol"
 )
 
-func main() {
+func Client(demotype string, demovalue string) {
+    log.Printf("%s", "myclient is running")
+
     // Set up a connection to the server.
     conn, err := grpc.Dial(address, grpc.WithInsecure())
     if err != nil {
@@ -33,16 +34,14 @@ func main() {
     network := defaultNetwork
     protocol := defaultProtocol
     protoHead := S1ProtoHead
-    if len(os.Args) > 1 {
-       demo = os.Args[1]
-       if (demo == defaultDemo) {
-           protocol = os.Args[2]
-           if protocol != defaultProtocol {
-               protoHead =  SNProtoHead
-           }
-       } else {
-           network = os.Args[2]
-       }
+    demo = demotype
+    if (demo == defaultDemo) {
+        protocol = demovalue
+        if protocol != defaultProtocol {
+            protoHead =  SNProtoHead
+        }
+    } else {
+        network = demovalue
     }
     ctx, cancel := context.WithTimeout(context.Background(), time.Second)
     defer cancel()
@@ -59,6 +58,7 @@ func main() {
         }
         log.Printf("%s", rr.Message)
     }
+    log.Printf("%s", "client is exiting")
 }
 
 
