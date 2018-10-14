@@ -1,0 +1,8 @@
+foo: hello there
+bar:
+  - one
+  - two
+alpha: 7
+beta:
+  - 3
+  - 4
