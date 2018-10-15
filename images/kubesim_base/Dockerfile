@@ -1,5 +1,5 @@
-#FROM arm32v7/python => very huge comared the one used here
-FROM don41382/rpi-python3-with-bluetooth
+FROM arm32v7/python 
+#FROM don41382/rpi-python3-with-bluetooth
 RUN apt-get update && apt-get install -y \
     bluetooth \
     bluez \
@@ -9,4 +9,4 @@ ADD grpc/go/kubedge_server/goserv /goserv
 ADD grpc/go/kubedge_client/goclient /goclient
 ADD utilities/detect_bluetooth.py /detect_bluetooth.py
 EXPOSE 50051
-CMD ["echo thetest"]
+CMD ["python --version"]
