@@ -29,6 +29,7 @@ while True:
     discovered_devices = [ name for addr, name in nearby_devices]
     if len(nearby_devices) > 0:
         print("Devices Detected {}".format(discovered_devices))
+        update_yaml(data={'connected': matched_users})
     else:
         print("No devices Detected!")
 
@@ -40,7 +41,7 @@ while True:
                   "will go sleep for sometime".format(name))
             match=True
             matched_users.append(name)
-    update_yaml(data={'connected': matched_users})
+    #update_yaml(data={'connected': matched_users})
     if not match:
         print("Still waiting for someone from our team to " \
             "come in bluetooth coverage area")
