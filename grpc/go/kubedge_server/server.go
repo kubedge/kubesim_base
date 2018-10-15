@@ -17,10 +17,12 @@ const (
 type kubedgeserver struct{}
 
 func (s *kubedgeserver) FiveGDemo(ctx context.Context, in *pb.EnodeRequest) (*pb.EPCReply, error) {
+	log.Printf("server recieved Message: " + in.Protocol +  ":: Recieved data from Enode")
 	return &pb.EPCReply{Message: in.Protocol +  ":: Recieved data from Enode"}, nil
 }
 
 func (s *kubedgeserver) DetectNW(ctx context.Context, in *pb.UERequest) (*pb.EPCReply, error) {
+	log.Printf("server received Message: " + in.Network +  ":: is the mode of connection")
 	return &pb.EPCReply{Message: in.Network +  ":: is the mode of connection"}, nil
 }
 
