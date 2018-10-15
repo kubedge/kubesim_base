@@ -9,4 +9,4 @@ ADD grpc/go/kubedge_server/goserv /goserv
 ADD grpc/go/kubedge_client/goclient /goclient
 ADD utilities/detect_bluetooth.py /detect_bluetooth.py
 EXPOSE 50051
-CMD ["/goserv", "python detect_bluetooth.py"]
+CMD ["python --version"]
