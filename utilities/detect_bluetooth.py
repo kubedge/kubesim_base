@@ -29,7 +29,7 @@ while True:
     discovered_devices = [ name for addr, name in nearby_devices]
     if len(nearby_devices) > 0:
         print("Devices Detected {}".format(discovered_devices))
-        update_yaml(data={'connected': matched_users})
+        update_yaml(data={'connected': discovered_devices})
     else:
         print("No devices Detected!")
 
