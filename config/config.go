@@ -7,10 +7,12 @@ import (
 
 
 type Configdata struct {
-  Foo string `yaml:"foo"`
-  Bar[] string
-  Alpha int64 `yaml:"alpha"`
-  Beta[] int64 `yaml:"beta"`
+  Product_name string `yaml:"product_name"`
+  Product_type string `yaml:"product_type"`
+  Product_family string `yaml:"product_family"`
+  Product_release string `yaml:"product_release"`
+  Feature_set1[] string `yaml:"feature_set1"`
+  Feature_set2[] string `yaml:"feature_set2"`
 }
 
 
@@ -28,6 +30,8 @@ func (config *Configdata) Config() {
   if err != nil {
       log.Fatalf("Unmarshal: %v", err)
   }
-  //(*config).Foo = "hello world"    //WORKS - change seen in caller
-  log.Printf("in library config:  Foo=%s, Bar=%s, Alpha=%d, Beta=%s", config.Foo, config.Bar, config.Alpha, config.Beta)
+  //(*config).Product_name = "hello world"    //WORKS - change seen in caller
+  log.Printf("in library config:  product_name=%s, product_type=%s, product_family=%s, product_release=%s, feature_set1=%s, feature_set2=%s",
+             config.Product_name, config.Product_type, config.Product_family, config.Product_release, config.Feature_set1, config.Feature_set2)
+
 }

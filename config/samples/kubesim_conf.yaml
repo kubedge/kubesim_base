@@ -1,8 +1,10 @@
-foo: hello there
-bar:
+product_name: epc
+product_type: 4g
+product_family: ran
+product_release: test
+feature_set1:
   - one
   - two
-alpha: 7
-beta:
-  - 3
-  - 4
+feature_set2:
+  - alpha
+  - beta
