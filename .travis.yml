@@ -30,21 +30,21 @@ jobs:
       - docker push $DBLUETOOTHREPO
     - stage: build health docker image
       script:
-      - export DHEALTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-arm32v7
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.0
       - cd health/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o healthserv .
       - cd ..
       - docker run --rm --privileged multiarch/qemu-user-static:register --reset
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t $DHEALTHREPO:$VERSION -f images/bluetooth_detect/Dockerfile .
+      - docker build -t $DHEALTHREPO:$VERSION -f images/health/Dockerfile .
       - docker images
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:travis-$TRAVIS_BUILD_NUMBER
       - docker push $DHEALTHREPO
     - stage: test health docker image
       script:
-      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_base-arm32v7
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.0
       - docker run --rm --privileged multiarch/qemu-user-static:register --reset
       - docker run -d --name test_base $DHEALTHREPO:$VERSION
