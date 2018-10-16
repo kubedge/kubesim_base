@@ -31,14 +31,14 @@ func append2log(message string) {
 func (s *kubedgeserver) FiveGDemo(ctx context.Context, in *pb.EnodeRequest) (*pb.EPCReply, error) {
 	message := "server recieved Message: " + in.Protocol +  ":: Recieved data from Enode"
 	log.Printf(message)
-	append2log(message)
+	//append2log(message)
 	return &pb.EPCReply{Message: in.Protocol +  ":: Recieved data from Enode"}, nil
 }
 
 func (s *kubedgeserver) DetectNW(ctx context.Context, in *pb.UERequest) (*pb.EPCReply, error) {
 	message := "server received Message: " + in.Network +  ":: is the mode of connection"
 	log.Printf(message)
-	append2log(message)
+	//append2log(message)
 	return &pb.EPCReply{Message: in.Network +  ":: is the mode of connection"}, nil
 }
 
