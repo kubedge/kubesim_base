@@ -16,7 +16,7 @@ jobs:
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goserv .
       - cd ../../../grpc/go/kubedge_client/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
-      - cd ../../../         
+      - cd ../../../
 #   - stage: build python docker image
 #     script:
 #     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-arm32v7
@@ -33,7 +33,7 @@ jobs:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.0
       - cd health/
-      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o healthserv .
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o healthsrv .
       - cd ..
       - docker run --rm --privileged multiarch/qemu-user-static:register --reset
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
