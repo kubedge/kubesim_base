@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	address     = "192.168.2.101:50051"
+	address     = "192.168.2.101:30180"
         //address     = "localhost:50051"
         defaultNetwork = "Bluetooth"
         S1ProtoHead = "X1000001"

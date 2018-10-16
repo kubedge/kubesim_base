@@ -11,7 +11,7 @@ device_addrs = []
 
 print("Scanning for bluetooth devices...")
 def update_yaml(**kwargs):
-    filename ='/etc/kubedge/connected.yaml'
+    filename ='/etc/kubedge/connected_ue.yaml'
     directory = os.path.dirname(filename)
     if not os.path.exists(directory):
          os.makedirs(directory)
