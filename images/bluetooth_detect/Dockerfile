@@ -5,8 +5,6 @@ RUN apt-get update && apt-get install -y \
     bluez \
     bluez-tools \
     python-bluez
-ADD grpc/go/kubedge_server/goserv /goserv
-ADD grpc/go/kubedge_client/goclient /goclient
 ADD utilities/detect_bluetooth.py /detect_bluetooth.py
 EXPOSE 50051
 CMD ["python","detect_bluetooth.py"]
