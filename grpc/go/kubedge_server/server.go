@@ -3,6 +3,7 @@ package server
 import (
         "log"
         "net"
+        "os"
         "golang.org/x/net/context"
         "google.golang.org/grpc"
         "google.golang.org/grpc/reflection"
@@ -11,23 +12,40 @@ import (
 
 const (
         port = ":50051"
+        logfilename = "/etc/kubedge/location_ue.txt"
 )
 
 
 type kubedgeserver struct{}
 
+func append2log(message string) {
+        f, err := os.OpenFile(logfilename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644) 
+        if err == nil {
+            f.WriteString(message + "\n") 
+            f.Close()
+        } else {
+	    log.Printf("error opening logfile %v", err)
+        }
+}
+
 func (s *kubedgeserver) FiveGDemo(ctx context.Context, in *pb.EnodeRequest) (*pb.EPCReply, error) {
-	log.Printf("server recieved Message: " + in.Protocol +  ":: Recieved data from Enode")
+	message := "server recieved Message: " + in.Protocol +  ":: Recieved data from Enode"
+	log.Printf(message)
+	append2log(message)
 	return &pb.EPCReply{Message: in.Protocol +  ":: Recieved data from Enode"}, nil
 }
 
 func (s *kubedgeserver) DetectNW(ctx context.Context, in *pb.UERequest) (*pb.EPCReply, error) {
-	log.Printf("server received Message: " + in.Network +  ":: is the mode of connection")
+	message := "server received Message: " + in.Network +  ":: is the mode of connection"
+	log.Printf(message)
+	append2log(message)
 	return &pb.EPCReply{Message: in.Network +  ":: is the mode of connection"}, nil
 }
 
 func Server() {
         log.Printf("server is running")
+        //append2log("test write to logfile") 
+
         lis, err := net.Listen("tcp", port)
         if err != nil {
                 log.Fatalf("failed to listen: %v", err)
