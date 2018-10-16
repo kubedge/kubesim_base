@@ -17,17 +17,17 @@ jobs:
       - cd ../../../grpc/go/kubedge_client/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
       - cd ../../../         
-    - stage: build python docker image
-      script:
-      - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-arm32v7
-      - export VERSION=0.1.0
-      - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t $DBLUETOOTHREPO:$VERSION -f images/bluetooth_detect/Dockerfile .
-      - docker images
-      - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:latest
-      - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:travis-$TRAVIS_BUILD_NUMBER
-      - docker push $DBLUETOOTHREPO
+#   - stage: build python docker image
+#     script:
+#     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-arm32v7
+#     - export VERSION=0.1.0
+#     - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+#     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#     - docker build -t $DBLUETOOTHREPO:$VERSION -f images/bluetooth_detect/Dockerfile .
+#     - docker images
+#     - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:latest
+#     - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:travis-$TRAVIS_BUILD_NUMBER
+#     - docker push $DBLUETOOTHREPO
     - stage: build health docker image
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
