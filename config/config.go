@@ -13,6 +13,7 @@ type Configdata struct {
   Product_release string `yaml:"product_release"`
   Feature_set1[] string `yaml:"feature_set1"`
   Feature_set2[] string `yaml:"feature_set2"`
+  Enable_log bool `yaml:"enable_log"`
 }
 
 
@@ -31,7 +32,7 @@ func (config *Configdata) Config() {
       log.Fatalf("Unmarshal: %v", err)
   }
   //(*config).Product_name = "hello world"    //WORKS - change seen in caller
-  log.Printf("in library config:  product_name=%s, product_type=%s, product_family=%s, product_release=%s, feature_set1=%s, feature_set2=%s",
-             config.Product_name, config.Product_type, config.Product_family, config.Product_release, config.Feature_set1, config.Feature_set2)
+  log.Printf("in library config:  product_name=%s, product_type=%s, product_family=%s, product_release=%s, feature_set1=%s, feature_set2=%s, enable_log=%v",
+             config.Product_name, config.Product_type, config.Product_family, config.Product_release, config.Feature_set1, config.Feature_set2, config.Enable_log)
 
 }
