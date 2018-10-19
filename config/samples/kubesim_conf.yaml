@@ -1,0 +1,10 @@
+product_name: epc
+product_type: 4g
+product_family: ran
+product_release: test
+feature_set1:
+  - one
+  - two
+feature_set2:
+  - alpha
+  - beta

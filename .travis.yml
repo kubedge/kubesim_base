@@ -10,15 +10,39 @@ service:
 
 jobs:
   include:
-    - stage: build docker image
+    - stage: check the go code
       script:
-      - export DHUBREPO=$DOCKER_NAMESPACE/kubesim_base-amd64
-      - export VERSION=0.1.0
-      - cd kubesim_base
+      - cd grpc/go/kubedge_server/
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o goserv .
+      - cd ../../../grpc/go/kubedge_client/
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o goclient .
+      - cd ../../../
+#   - stage: build python docker image
+#     script:
+#     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-amd64
+#     - export VERSION=0.1.0
+#     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#     - docker build -t $DBLUETOOTHREPO:$VERSION -f images/bluetooth_detect/Dockerfile .
+#     - docker images
+#     - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:latest
+#     - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:travis-$TRAVIS_BUILD_NUMBER
+#     - docker push $DBLUETOOTHREPO
+    - stage: build health docker image
+      script:
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-amd64
+      - export VERSION=0.1.0
+      - cd health/
+      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o healthsrv .
       - cd ..
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - stage: test
+      - docker build -t $DHEALTHREPO:$VERSION -f images/health/Dockerfile .
+      - docker images
+      - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
+      - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:travis-$TRAVIS_BUILD_NUMBER
+      - docker push $DHEALTHREPO
+    - stage: test health docker image
       script:
-      - export DHUBREPO=$DOCKER_NAMESPACE/kubesim_base-amd64
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-amd64
       - export VERSION=0.1.0
+      - docker run -d --name test_base $DHEALTHREPO:$VERSION
+      - docker ps | grep -q test_base
