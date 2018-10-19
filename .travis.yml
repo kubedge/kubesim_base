@@ -21,18 +21,22 @@ jobs:
       - sudo apt-get install -y libpcap-dev
       script:
       - cd grpc/go/kubedge_server/
-      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o goserv .
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goserv .
       - cd ../../../grpc/go/kubedge_client/
-      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o goclient .
-      - cd ../../../arpscan/
-      - CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o arpscan .
-      - cd ../cmdrun/
-      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o cmdrun .
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
+#     JEB: Still can't figure out how to cross compile
+#      - cd ../../../arpscan/
+#      - CGO_ENABLED=1 GOOS=linux GOARM=7 GOARCH=arm go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o arpscan .
+#      - cd ../cmdrun/
+      - cd ../../../cmdrun/
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o cmdrun .
       - cd ..
 #   - stage: build python docker image
 #     script:
-#     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-dev
-#     - export VERSION=0.1.0
+#     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-arm32v7
+#     - export VERSION=0.1.9
+#     - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 #     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 #     - docker build -t $DBLUETOOTHREPO:$VERSION -f images/bluetooth_detect/Dockerfile .
 #     - docker images
@@ -44,12 +48,12 @@ jobs:
       - sudo apt-get update
       - sudo apt-get install -y libpcap-dev
       script:
-      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-dev
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.11
       - cd health/
-      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/bin/healthsrv -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
+      - GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=0 go build -o build/_output/arm32v7/healthsrv -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t $DHEALTHREPO:$VERSION -f build/Dockerfile .
+      - docker build -t $DHEALTHREPO:$VERSION -f build/Dockerfile.arm32v7 .
       - cd ..
       - docker images
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
@@ -60,7 +64,8 @@ jobs:
       - sudo apt-get update
       - sudo apt-get install -y libpcap-dev
       script:
-      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-dev
+      - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.11
+      - docker run --rm --privileged multiarch/qemu-user-static:register --reset
       - docker run -d --name test_base $DHEALTHREPO:$VERSION
       - docker ps | grep -q test_base
