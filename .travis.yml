@@ -20,7 +20,9 @@ jobs:
       - cd ../../../grpc/go/kubedge_client/
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o goclient .
       - cd ../../../arpscan/
-      - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o arpscan .
+#     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -tags netgo -ldflags '-w -extldflags "-static"' -o arpscan .
+#     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o arpscan .
+      - GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o arpscan .
       - cd ../cmdrun/
       - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o cmdrun .
       - cd ..
