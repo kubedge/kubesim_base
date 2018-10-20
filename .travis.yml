@@ -37,6 +37,9 @@ jobs:
 #     - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:travis-$TRAVIS_BUILD_NUMBER
 #     - docker push $DBLUETOOTHREPO
     - stage: build health docker image
+      before_install:
+      - sudo apt-get update
+      - sudo apt-get install -y libpcap-dev
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-amd64
       - export VERSION=0.1.0
