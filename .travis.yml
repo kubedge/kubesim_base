@@ -11,12 +11,19 @@ service:
 jobs:
   include:
     - stage: check the go code
+      before_install:
+      - sudo apt-get update
+      - sudo apt-get install -y libpcap-dev
       script:
       - cd grpc/go/kubedge_server/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goserv .
       - cd ../../../grpc/go/kubedge_client/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
-      - cd ../../../
+      - cd ../../../arpscan/
+      - CGO_ENABLED=1 GOOS=linux GOARM=7 GOARCH=arm go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o arpscan .
+      - cd ../cmdrun/
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o cmdrun .
+      - cd ..
 #   - stage: build python docker image
 #     script:
 #     - export DBLUETOOTHREPO=$DOCKER_NAMESPACE/bluetooth_detect-arm32v7
@@ -29,6 +36,9 @@ jobs:
 #     - docker tag $DBLUETOOTHREPO:$VERSION $DBLUETOOTHREPO:travis-$TRAVIS_BUILD_NUMBER
 #     - docker push $DBLUETOOTHREPO
     - stage: build health docker image
+      before_install:
+      - sudo apt-get update
+      - sudo apt-get install -y libpcap-dev
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.0
@@ -43,6 +53,9 @@ jobs:
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:travis-$TRAVIS_BUILD_NUMBER
       - docker push $DHEALTHREPO
     - stage: test health docker image
+      before_install:
+      - sudo apt-get update
+      - sudo apt-get install -y libpcap-dev
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-arm32v7
       - export VERSION=0.1.0
