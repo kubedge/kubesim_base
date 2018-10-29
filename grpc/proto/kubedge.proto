@@ -8,7 +8,37 @@ service Kubedge {
   // Sends a message
   rpc FiveGDemo(EnodeRequest) returns (EPCReply) {}
   rpc DetectNW(UERequest) returns (EPCReply) {}
+
+  // call flow messages
+  rpc MME_PDN_CONNECT(MME_PDN_CONNECT_MSG) returns (SIMReply) {}
+  rpc MME_PDN_DISCONNECT(MME_PDN_DISCONNECT_MSG) returns (SIMReply) {}
+  rpc MME_ATTACH(MME_ATTACH_MSG) returns (SIMReply) {}
+  rpc MME_DETACH(MME_DETACH_MSG) returns (SIMReply) {}
+  rpc MME_HO(MME_HO_MSG) returns (SIMReply) {}
+  rpc MME_TAU(MME_TAU_MSG) returns (SIMReply) {}
+  rpc MME_SERVICE_REQUEST(MME_SERVICE_REQUEST_MSG) returns (SIMReply) {}
+  rpc SGW_SESSION_CREATION(SGW_SESSION_CREATION_MSG) returns (SIMReply) {}
+  rpc SGW_SESSION_DELETION(SGW_SESSION_DELETION_MSG) returns (SIMReply) {}
+  rpc SGW_BEARER_CREATION(SGW_BEARER_CREATION_MSG) returns (SIMReply) {}
+  rpc SGW_BEARER_DELETION(SGW_BEARER_DELETION_MSG) returns (SIMReply) {}
+  rpc SGW_BEARER_MODIFICATION(SGW_BEARER_MODIFICATION_MSG) returns (SIMReply) {}
+  rpc SGW_DEDICATED_BEARER_ACTIVATE(SGW_DEDICATED_BEARER_ACTIVATE_MSG) returns (SIMReply) {}
+  rpc SGW_DEDICATED_BEARER_DEACTIVATE(SGW_DEDICATED_BEARER_DEACTIVATE_MSG) returns (SIMReply) {}
+  rpc ENB_RRC_CONN_SETUP(ENB_RRC_CONN_SETUP_MSG) returns (SIMReply) {}
+  rpc ENB_S1_SIG_CONN_SETUP(ENB_S1_SIG_CONN_SETUP_MSG) returns (SIMReply) {}
+  rpc ENB_INITIAL_CTXT_SETUP(ENB_INITIAL_CTXT_SETUP_MSG) returns (SIMReply) {}
+  rpc ENB_UE_CTX_RELEASE(ENB_UE_CTX_RELEASE_MSG) returns (SIMReply) {}
+  rpc ENB_X2HO_PREP_OUT(ENB_X2HO_PREP_OUT_MSG) returns (SIMReply) {}
+  rpc ENB_X2HO_PREP_IN(ENB_X2HO_PREP_IN_MSG) returns (SIMReply) {}
+  rpc ENB_X2HO_EXEC_OUT(ENB_X2HO_EXEC_OUT_MSG) returns (SIMReply) {}
+  rpc ENB_X2HO_EXEC_IN(ENB_X2HO_EXEC_IN_MSG) returns (SIMReply) {}
+  rpc ENB_ERAB_SETUP(ENB_ERAB_SETUP_MSG) returns (SIMReply) {}
+  rpc ENB_ERAB_RELEASE(ENB_ERAB_RELEASE_MSG) returns (SIMReply) {}
 }
+
+// ===================================================
+// Dummy Message added during Hack4Easy
+// ===================================================
 
 // The request message containing the protocol name.
 message EnodeRequest {
@@ -25,3 +55,111 @@ message UERequest {
   string network = 1;
 }
 
+message SIMReply {
+  string message = 1;
+}
+
+// ===================================================
+// Skeleton of messages send by 5G systems
+// ===================================================
+
+
+// ===================================================
+// Skeleton of messages send by LTE systems
+// ===================================================
+
+message MME_PDN_CONNECT_MSG {
+  string imsi = 1;
+}
+
+message MME_PDN_DISCONNECT_MSG {
+  string imsi = 1;
+}
+
+message MME_ATTACH_MSG {
+  string imsi = 1;
+}
+
+message MME_DETACH_MSG {
+  string imsi = 1;
+}
+
+message MME_HO_MSG {
+  string imsi = 1;
+}
+
+message MME_TAU_MSG {
+  string imsi = 1;
+}
+
+message MME_SERVICE_REQUEST_MSG {
+  string imsi = 1;
+}
+
+message SGW_SESSION_CREATION_MSG {
+  string imsi = 1;
+}
+
+message SGW_SESSION_DELETION_MSG {
+  string imsi = 1;
+}
+
+message SGW_BEARER_CREATION_MSG {
+  string imsi = 1;
+}
+
+message SGW_BEARER_DELETION_MSG {
+  string imsi = 1;
+}
+
+message SGW_BEARER_MODIFICATION_MSG {
+  string imsi = 1;
+}
+
+message SGW_DEDICATED_BEARER_ACTIVATE_MSG {
+  string imsi = 1;
+}
+
+message SGW_DEDICATED_BEARER_DEACTIVATE_MSG {
+  string imsi = 1;
+}
+
+message ENB_RRC_CONN_SETUP_MSG {
+  string imsi = 1;
+}
+
+message ENB_S1_SIG_CONN_SETUP_MSG {
+  string imsi = 1;
+}
+
+message ENB_INITIAL_CTXT_SETUP_MSG {
+  string imsi = 1;
+}
+
+message ENB_UE_CTX_RELEASE_MSG {
+  string imsi = 1;
+}
+
+message ENB_X2HO_PREP_OUT_MSG {
+  string imsi = 1;
+}
+
+message ENB_X2HO_PREP_IN_MSG {
+  string imsi = 1;
+}
+
+message ENB_X2HO_EXEC_OUT_MSG {
+  string imsi = 1;
+}
+
+message ENB_X2HO_EXEC_IN_MSG {
+  string imsi = 1;
+}
+
+message ENB_ERAB_SETUP_MSG {
+  string imsi = 1;
+}
+
+message ENB_ERAB_RELEASE_MSG {
+  string imsi = 1;
+}
