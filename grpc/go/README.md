@@ -5,7 +5,10 @@ go version
 go help gopath
 export PATH=$PATH:$GOPATH/bin
 go get -u google.golang.org/grpc
-go get -u github.com/kubedge/kubesim_base/grpc/go
+go get -u google.golang.org/grpc
+go get -u github.com/golang/protobuf/protoc-gen-go
+sudo apt  install protobuf-compiler
+protoc -I proto/ proto/kubedge.proto --go_out=go
 ```
 
 On server:
