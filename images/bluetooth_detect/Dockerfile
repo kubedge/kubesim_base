@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#FROM arm32v7/python 
+#FROM arm32v7/python
 FROM don41382/rpi-python3-with-bluetooth
 RUN apt-get update && apt-get install -y \
     bluetooth \
