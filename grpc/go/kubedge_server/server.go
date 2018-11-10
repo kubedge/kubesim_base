@@ -49,10 +49,10 @@ func append2log(message string) {
 }
 
 func (s *kubedgeserver) FiveGDemo(ctx context.Context, in *pb.EnodeRequest) (*pb.EPCReply, error) {
-	message := "server recieved Message: " + in.Protocol + ":: Recieved data from Enode"
+	message := "server received Message: " + in.Protocol + ":: Received data from eNodeB"
 	log.Printf(message)
 	append2log(message)
-	return &pb.EPCReply{Message: in.Protocol + ":: Recieved data from Enode"}, nil
+	return &pb.EPCReply{Message: in.Protocol + ":: Received data from eNodeB"}, nil
 }
 
 func (s *kubedgeserver) DetectNW(ctx context.Context, in *pb.UERequest) (*pb.EPCReply, error) {
