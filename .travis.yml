@@ -16,12 +16,15 @@ jobs:
       - sudo apt-get install -y libpcap-dev
       script:
       - cd grpc/go/kubedge_server/
+      - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goserv .
       - cd ../../../grpc/go/kubedge_client/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o goclient .
-      - cd ../../../arpscan/
-      - CGO_ENABLED=1 GOOS=linux GOARM=7 GOARCH=arm go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o arpscan .
-      - cd ../cmdrun/
+#     JEB: Still can't figure out how to cross compile
+#      - cd ../../../arpscan/
+#      - CGO_ENABLED=1 GOOS=linux GOARM=7 GOARCH=arm go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o arpscan .
+#      - cd ../cmdrun/
+      - cd ../../../cmdrun/
       - CGO_ENABLED=0 GOOS=linux GOARM=7 GOARCH=arm go build -a -installsuffix cgo -o cmdrun .
       - cd ..
 #   - stage: build python docker image
