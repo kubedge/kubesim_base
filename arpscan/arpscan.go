@@ -15,17 +15,28 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
+	"os"
 	"sync"
 	"time"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
+	"gopkg.in/yaml.v2"
 )
 
 func main() {
+	log.Printf("%s", "arpscan is running")
+	watched_interface := ""
+	if len(os.Args) == 2 {
+		watched_interface = os.Args[1]
+	}
+	log.Printf("watched interface %s", watched_interface)
+
 	// Get a list of all interfaces.
 	ifaces, err := net.Interfaces()
 	if err != nil {
@@ -34,14 +45,16 @@ func main() {
 
 	var wg sync.WaitGroup
 	for _, iface := range ifaces {
-		wg.Add(1)
-		// Start up a scan on each interface.
-		go func(iface net.Interface) {
-			defer wg.Done()
-			if err := scan(&iface); err != nil {
-				log.Printf("interface %v: %v", iface.Name, err)
-			}
-		}(iface)
+		if (watched_interface == "") || (iface.Name == watched_interface) {
+			wg.Add(1)
+			// Start up a scan on each interface.
+			go func(iface net.Interface) {
+				defer wg.Done()
+				if err := scan(&iface); err != nil {
+					log.Printf("interface %v: %v", iface.Name, err)
+				}
+			}(iface)
+		}
 	}
 	// Wait for all interfaces' scans to complete.  They'll try to run
 	// forever, but will stop on an error, so if we get past this Wait
@@ -88,9 +101,12 @@ func scan(iface *net.Interface) error {
 	}
 	defer handle.Close()
 
+	var connected map[string]string
+	connected = make(map[string]string)
+
 	// Start up a goroutine to read in packet data.
 	stop := make(chan struct{})
-	go readARP(handle, iface, stop)
+	go readARP(handle, iface, stop, &connected)
 	defer close(stop)
 	for {
 		// Write our scan packets out to the handle.
@@ -102,13 +118,27 @@ func scan(iface *net.Interface) error {
 		// sent back to us, but 10 seconds should be more than enough
 		// time ;)
 		time.Sleep(10 * time.Second)
+
+		// for key, value := range connected {
+		//     fmt.Println("%s %s", key, value)
+		// }
+		d, err := yaml.Marshal(&connected)
+		if err != nil {
+			log.Fatalf("error: %v", err)
+		}
+		dataString := fmt.Sprintf("---\n%s\n", string(d))
+		dataBytes := []byte(dataString)
+		ioutil.WriteFile(fmt.Sprintf("/etc/kubedge/connected.%s.yaml",iface.Name), dataBytes, 0644)
+
+		// Empty the map
+		connected = map[string]string{}
 	}
 }
 
 // readARP watches a handle for incoming ARP responses we might care about, and prints them.
 //
 // readARP loops until 'stop' is closed.
-func readARP(handle *pcap.Handle, iface *net.Interface, stop chan struct{}) {
+func readARP(handle *pcap.Handle, iface *net.Interface, stop chan struct{}, connected *map[string]string) {
 	src := gopacket.NewPacketSource(handle, layers.LayerTypeEthernet)
 	in := src.Packets()
 	for {
@@ -129,7 +159,10 @@ func readARP(handle *pcap.Handle, iface *net.Interface, stop chan struct{}) {
 			// Note:  we might get some packets here that aren't responses to ones we've sent,
 			// if for example someone else sends US an ARP request.  Doesn't much matter, though...
 			// all information is good information :)
-			log.Printf("IP %v is at %v", net.IP(arp.SourceProtAddress), net.HardwareAddr(arp.SourceHwAddress))
+			// log.Printf(", %v , %v", net.IP(arp.SourceProtAddress), net.HardwareAddr(arp.SourceHwAddress))
+			key := net.HardwareAddr(arp.SourceHwAddress).String()
+			value := net.IP(arp.SourceProtAddress).String()
+			(*connected)[key] = value
 		}
 	}
 }
