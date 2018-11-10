@@ -22,6 +22,10 @@ import (
 	"log"
 )
 
+const DEFAULT_SIM_NAME = "KUBESIM"
+const DEFAULT_CONFIG_FILE = "/etc/kubedge/kubesim_conf.yaml"
+const DEBUG_LOG = false
+
 type Configdata struct {
 	Product_name    string   `yaml:"product_name"`
 	Product_type    string   `yaml:"product_type"`
@@ -32,22 +36,26 @@ type Configdata struct {
 	Enable_log      bool     `yaml:"enable_log"`
 }
 
-func (config *Configdata) Config() {
-	log.Printf("%s", "Config invoked")
+func (config *Configdata) Config(simname string, filename string) {
+	if simname == "" {
+		simname = DEFAULT_SIM_NAME
+	}
+	if filename == "" {
+		filename = DEFAULT_CONFIG_FILE
+	}
 
-	yamlFile, err := ioutil.ReadFile("/etc/kubedge/kubesim_conf.yaml")
-	//yamlFile, err := ioutil.ReadFile("/tmp/kubesim_conf.yaml")
-	log.Printf("yamlFile=%s", string(yamlFile))
+	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		log.Printf("%s: %s: Read: %v", simname, filename, err)
 	}
 
 	err = yaml.Unmarshal(yamlFile, config)
 	if err != nil {
-		log.Fatalf("Unmarshal: %v", err)
+		log.Fatalf("%s: %s: Unmarshal: %v", simname, filename, err)
 	}
-	//(*config).Product_name = "hello world"    //WORKS - change seen in caller
-	log.Printf("in library config:  product_name=%s, product_type=%s, product_family=%s, product_release=%s, feature_set1=%s, feature_set2=%s, enable_log=%v",
-		config.Product_name, config.Product_type, config.Product_family, config.Product_release, config.Feature_set1, config.Feature_set2, config.Enable_log)
+	if DEBUG_LOG {
+		log.Printf("%s: %s contains: product_name=%s, product_type=%s, product_family=%s, product_release=%s, feature_set1=%s, feature_set2=%s, enable_log=%v",
+			simname, filename, config.Product_name, config.Product_type, config.Product_family, config.Product_release, config.Feature_set1, config.Feature_set2, config.Enable_log)
+	}
 
 }
