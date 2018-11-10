@@ -128,7 +128,7 @@ func scan(iface *net.Interface) error {
 		}
 		dataString := fmt.Sprintf("---\n%s\n", string(d))
 		dataBytes := []byte(dataString)
-		ioutil.WriteFile(fmt.Sprintf("/etc/kubedge/connected.%s.yaml",iface.Name), dataBytes, 0644)
+		ioutil.WriteFile(fmt.Sprintf("/etc/kubedge/connected.%s.yaml", iface.Name), dataBytes, 0644)
 
 		// Empty the map
 		connected = map[string]string{}
