@@ -34,13 +34,13 @@ const (
 	defaultDemo     = "protocol"
 )
 
-func Client(demotype string, demovalue string) {
-	log.Printf("%s", "myclient is running")
+func Client(simuname string, demotype string, demovalue string) {
+	log.Printf("%s: %s", simuname, "GRPC Client is starting")
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Fatalf("%s: did not connect: %v", simuname, err)
 	}
 	defer conn.Close()
 	c := pb.NewKubedgeClient(conn)
@@ -64,15 +64,15 @@ func Client(demotype string, demovalue string) {
 	if demo == defaultDemo {
 		r, err := c.FiveGDemo(ctx, &pb.EnodeRequest{Protocol: protoHead})
 		if err != nil {
-			log.Fatalf("Error: %v", err)
+			log.Fatalf("%s: Error: %v", simuname, err)
 		}
-		log.Printf("%s", r.Message)
+		log.Printf("%s: %s", simuname, r.Message)
 	} else {
 		rr, errr := c.DetectNW(ctx, &pb.UERequest{Network: network})
 		if errr != nil {
-			log.Fatalf("Error: %v", errr)
+			log.Fatalf("%s: Error: %v", simuname, errr)
 		}
-		log.Printf("%s", rr.Message)
+		log.Printf("%s: %s", simuname, rr.Message)
 	}
-	log.Printf("%s", "client is exiting")
+	log.Printf("%s: %s", simuname, "GRPC Client is exiting")
 }

@@ -22,25 +22,34 @@ import (
 	"log"
 )
 
+const DEFAULT_SIM_NAME = "KUBESIM"
+const DEFAULT_CONNECTED_UE_FILE = "/etc/kubedge/connected_ue.yaml"
+const DEBUG_LOG = false
+
 type Connecteddata struct {
 	Connected []string `yaml:"connected"`
 }
 
-func (conn *Connecteddata) Readconnectvalues() {
-	log.Printf("%s", "Connected invoked")
+func (conn *Connecteddata) Readconnectvalues(simname string, filename string) {
+	if simname == "" {
+		simname = DEFAULT_SIM_NAME
+	}
+	if filename == "" {
+		filename = DEFAULT_CONNECTED_UE_FILE
+	}
 
-	yamlFile, err := ioutil.ReadFile("/etc/kubedge/connected_ue.yaml")
-	//yamlFile, err := ioutil.ReadFile("/tmp/connected_ue.yaml")
-	log.Printf("yamlFile=%s", string(yamlFile))
+	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		log.Printf("%s: %s: Read: %v", simname, filename, err)
 	}
 
 	err = yaml.Unmarshal(yamlFile, conn)
 	if err != nil {
-		log.Fatalf("Unmarshal: %v", err)
+		log.Fatalf("%s: %s: Unmarshal: %v", simname, filename, err)
 	}
-	//(*conn).Connected[0] = "hello world"    //WORKS - change seen in caller
-	log.Printf("in library connected: connected=%s", conn.Connected)
+
+	if DEBUG_LOG {
+		log.Printf("%s: %s contains: connected=%s", simname, filename, conn.Connected)
+	}
 
 }
