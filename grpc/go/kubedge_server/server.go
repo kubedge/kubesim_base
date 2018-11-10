@@ -62,20 +62,19 @@ func (s *kubedgeserver) DetectNW(ctx context.Context, in *pb.UERequest) (*pb.EPC
 	return &pb.EPCReply{Message: in.Network + ":: is the mode of connection"}, nil
 }
 
-func Server(c config.Configdata) {
+func Server(simuname string, c config.Configdata) {
 	conf = c
-	log.Printf("server is running, enable_log=%s", conf.Enable_log)
-	//append2log("test write to logfile")
+	log.Printf("%s: server is running, enable_log=%s", simuname, conf.Enable_log)
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("%s: failed to listen: %v", simuname, err)
 	}
 	s := grpc.NewServer()
 	pb.RegisterKubedgeServer(s, &kubedgeserver{})
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatalf("%s: failed to serve: %v", simuname, err)
 	}
-	log.Fatalf("server is exiting", err)
+	log.Fatalf("%s: server is exiting", simuname, err)
 }
