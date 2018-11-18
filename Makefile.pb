@@ -25,7 +25,7 @@ DHUBREPO         = ${DOCKER_NAMESPACE}/${IMAGE_NAME}
 all: simulator
 
 simulator: health/main.go
-	cd health && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o healthsrv-${CURRENT_BRANCH} .
+	cd health && CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o healthsrv-${CURRENT_BRANCH} .
 
 clean: health/healthsrv-${CURRENT_BRANCH}
 	cd health && rm -f healthsrv-${CURRENT_BRANCH}
