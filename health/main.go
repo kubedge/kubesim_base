@@ -20,7 +20,7 @@ func main() {
 	defer server.Shutdown()
 
 	server.ConfigureFlags()
-	server.Port = 8080
+	server.Port = 8081
 
 	server.ConfigureAPI()
 
