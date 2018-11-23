@@ -1,35 +1,31 @@
-/*
-Copyright 2018 Kubedge
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package main
 
 import (
-	"net/http"
-	"strings"
+	"log"
+
+	loads "github.com/go-openapi/loads"
+	"github.com/kubedge/kubesim_base/health/restapi"
+	"github.com/kubedge/kubesim_base/health/restapi/operations"
 )
 
-func sayHello(w http.ResponseWriter, r *http.Request) {
-	message := r.URL.Path
-	message = strings.TrimPrefix(message, "/")
-	message = "Hello " + message
-	w.Write([]byte(message))
-}
 func main() {
-	http.HandleFunc("/", sayHello)
-	if err := http.ListenAndServe(":8081", nil); err != nil {
-		panic(err)
+
+	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
+	if err != nil {
+		log.Fatalln(err)
 	}
+
+	api := operations.NewCfgapisrvAPI(swaggerSpec)
+	server := restapi.NewServer(api)
+	defer server.Shutdown()
+
+	server.ConfigureFlags()
+	server.Port = 8080
+
+	server.ConfigureAPI()
+
+	if err := server.Serve(); err != nil {
+		log.Fatalln(err)
+	}
+
 }

@@ -1,0 +1,64 @@
+---
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: KUBEDGE ConfigAPI Server
+paths:
+  /liveness:
+    get:
+      produces:
+        - text/plain
+      parameters: []
+      operationId: probeLiveness
+      responses:
+        200:
+          description: returns a liveness state of the simulator
+          schema:
+              type: string
+              description: contains the actual liveness state as plain text
+  /readiness:
+    get:
+      produces:
+        - text/plain
+      parameters: []
+      operationId: probeReadiness
+      responses:
+        200:
+          description: returns a readiness state of the simulator
+          schema:
+              type: string
+              description: contains the actual readiness state as plain text
+  /config:
+    get:
+      produces:
+        - text/plain
+      parameters:
+        - name: name
+          required: false
+          type: string
+          in: query
+          description: defaults to all if not given
+      operationId: getConfig
+      responses:
+        200:
+          description: returns a config file
+          schema:
+              type: string
+              description: contains the actual config as plain text
+  /hello:
+    get:
+      produces:
+        - text/plain
+      parameters:
+        - name: name
+          required: false
+          type: string
+          in: query
+          description: defaults to World if not given
+      operationId: getGreeting
+      responses:
+        200:
+          description: returns a greeting
+          schema:
+              type: string
+              description: contains the actual greeting as plain text
