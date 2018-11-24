@@ -25,7 +25,8 @@ import (
 )
 
 const (
-	address = "192.168.2.101:30180"
+	// we have a problem here for 5G Core 
+	address = "sim-epc-kubesim-epc.default.svc.cluster.local:30180"
 	defaultNetwork  = "Bluetooth"
 	S1ProtoHead     = "X1000001"
 	SNProtoHead     = "XN888888"
