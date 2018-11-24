@@ -28,7 +28,6 @@ import (
 )
 
 const (
-	port        = ":50051"
 	logfilename = "/etc/kubedge/location_ue.txt"
 )
 
@@ -232,16 +231,16 @@ func (s *kubedgeserver) ENB_ERAB_RELEASE(ctx context.Context, in *pb.ENB_ERAB_RE
 
 func Server(simuname string, c config.Configdata) {
 	conf = c
-	log.Printf("%s: server is running, enable_log=%s", simuname, conf.Enable_log)
+	log.Printf("%s: server is running, enable_log=%v", simuname, conf.Enable_log)
 
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", conf.Kubedge_server_port)
 	if err != nil {
 		log.Fatalf("%s: failed to listen: %v", simuname, err)
 	}
-	s := grpc.NewServer()
-	pb.RegisterKubedgeServer(s, &kubedgeserver{})
-	reflection.Register(s)
-	if err := s.Serve(lis); err != nil {
+	server := grpc.NewServer()
+	pb.RegisterKubedgeServer(server, &kubedgeserver{})
+	reflection.Register(server)
+	if err := server.Serve(lis); err != nil {
 		log.Fatalf("%s: failed to serve: %v", simuname, err)
 	}
 	log.Fatalf("%s: server is exiting", simuname, err)
