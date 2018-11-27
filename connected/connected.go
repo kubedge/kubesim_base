@@ -27,7 +27,7 @@ const DEFAULT_CONNECTED_UE_FILE = "/etc/kubedge/connected_ue.yaml"
 const DEBUG_LOG = false
 
 type Connecteddata struct {
-	Connected []string `yaml:"connected"`
+	Connected map[string]string `yaml:"connected"`
 }
 
 func (conn *Connecteddata) Readconnectvalues(simname string, filename string) {

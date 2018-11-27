@@ -29,6 +29,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type ConnectedData struct {
+	Connected map[string]string `yaml:"connected"`
+}
+
 func main() {
 	log.Printf("%s", "arpscan is running")
 	watched_interface := ""
@@ -101,12 +105,12 @@ func scan(iface *net.Interface) error {
 	}
 	defer handle.Close()
 
-	var connected map[string]string
-	connected = make(map[string]string)
+	var cdata ConnectedData
+	cdata.Connected = make(map[string]string)
 
 	// Start up a goroutine to read in packet data.
 	stop := make(chan struct{})
-	go readARP(handle, iface, stop, &connected)
+	go readARP(handle, iface, stop, &cdata.Connected)
 	defer close(stop)
 	for {
 		// Write our scan packets out to the handle.
@@ -119,10 +123,10 @@ func scan(iface *net.Interface) error {
 		// time ;)
 		time.Sleep(10 * time.Second)
 
-		// for key, value := range connected {
+		// for key, value := range cdata.Connected {
 		//     fmt.Println("%s %s", key, value)
 		// }
-		d, err := yaml.Marshal(&connected)
+		d, err := yaml.Marshal(&cdata)
 		if err != nil {
 			log.Fatalf("error: %v", err)
 		}
@@ -131,7 +135,7 @@ func scan(iface *net.Interface) error {
 		ioutil.WriteFile(fmt.Sprintf("/etc/kubedge/connected.%s.yaml", iface.Name), dataBytes, 0644)
 
 		// Empty the map
-		connected = map[string]string{}
+		cdata.Connected = map[string]string{}
 	}
 }
 
