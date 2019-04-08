@@ -13,7 +13,6 @@
 # limitations under the License.
 
 FROM scratch
-ADD health/ca-certificates.crt /etc/ssl/certs/
-ADD health/healthsrv /healthsrv
-EXPOSE 8081
+ADD build/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ADD build/_output/amd64/healthsrv /healthsrv
 CMD ["/healthsrv"]
