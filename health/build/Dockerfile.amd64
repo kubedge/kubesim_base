@@ -12,12 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM amd64/python 
-RUN apt-get update && apt-get install -y \
-    bluetooth \
-    bluez \
-    bluez-tools \
-    python-bluez
-ADD utilities/detect_bluetooth.py /detect_bluetooth.py
-EXPOSE 50051
-CMD ["python","detect_bluetooth.py"]
+FROM scratch
+ADD build/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ADD build/_output/amd64/healthsrv /healthsrv
+CMD ["/healthsrv"]
