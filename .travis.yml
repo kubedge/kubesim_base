@@ -49,7 +49,7 @@ jobs:
       - cd health/
       - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/bin/healthsrv -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t $DHUBREPO:$VERSION -f build/Dockerfile .
+      - docker build -t $DHEALTHREPO:$VERSION -f build/Dockerfile .
       - cd ..
       - docker images
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
