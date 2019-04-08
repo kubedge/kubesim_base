@@ -45,7 +45,7 @@ func configureAPI(api *operations.CfgapisrvAPI) http.Handler {
 
 			configfile := fmt.Sprintf("Config for %s!", name)
 			return operations.NewGetConfigOK().WithPayload(configfile)
-	})
+		})
 	api.GetGreetingHandler = operations.GetGreetingHandlerFunc(
 		func(params operations.GetGreetingParams) middleware.Responder {
 			name := swag.StringValue(params.Name)
@@ -60,11 +60,11 @@ func configureAPI(api *operations.CfgapisrvAPI) http.Handler {
 	api.ProbeLivenessHandler = operations.ProbeLivenessHandlerFunc(
 		func(params operations.ProbeLivenessParams) middleware.Responder {
 			return operations.NewProbeLivenessOK().WithPayload("kubesim alive")
-	})
+		})
 	api.ProbeReadinessHandler = operations.ProbeReadinessHandlerFunc(
 		func(params operations.ProbeReadinessParams) middleware.Responder {
 			return operations.NewProbeReadinessOK().WithPayload("kubesim ready")
-	})
+		})
 
 	api.ServerShutdown = func() {}
 
