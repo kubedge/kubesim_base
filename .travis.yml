@@ -3,7 +3,7 @@ sudo: true
 language: go
 
 go:
-  - "1.13.x"
+  - "1.15.x"
 
 service:
   - docker
@@ -45,7 +45,7 @@ jobs:
       - sudo apt-get install -y libpcap-dev
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-dev
-      - export VERSION=0.1.11
+      - export VERSION=0.1.19
       - cd health/
       - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/bin/healthsrv -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 ./cmd/...
       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -61,6 +61,6 @@ jobs:
       - sudo apt-get install -y libpcap-dev
       script:
       - export DHEALTHREPO=$DOCKER_NAMESPACE/kubesim_health-dev
-      - export VERSION=0.1.11
+      - export VERSION=0.1.19
       - docker run -d --name test_base $DHEALTHREPO:$VERSION
       - docker ps | grep -q test_base
