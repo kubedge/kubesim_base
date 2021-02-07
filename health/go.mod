@@ -10,6 +10,6 @@ require (
 	github.com/go-openapi/strfmt v0.19.0
 	github.com/go-openapi/swag v0.19.0
 	github.com/jessevdk/go-flags v1.4.0
-	github.com/kubedge/kubesim_base v0.1.19
+	github.com/kubedge/kubesim_base v0.1.20
 	golang.org/x/net v0.0.0-20190328230028-74de082e2cca
 )
