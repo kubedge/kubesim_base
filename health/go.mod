@@ -1,6 +1,6 @@
 module github.com/kubedge/kubesim_base/health
 
-go 1.16
+go 1.17
 
 require (
 	github.com/go-openapi/errors v0.19.0
@@ -10,6 +10,6 @@ require (
 	github.com/go-openapi/strfmt v0.19.0
 	github.com/go-openapi/swag v0.19.0
 	github.com/jessevdk/go-flags v1.4.0
-	github.com/kubedge/kubesim_base v0.1.22
+	github.com/kubedge/kubesim_base v0.1.23
 	golang.org/x/net v0.0.0-20190328230028-74de082e2cca
 )
