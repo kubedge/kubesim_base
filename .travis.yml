@@ -54,7 +54,9 @@ jobs:
       - docker images
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:latest
       - docker tag $DHEALTHREPO:$VERSION $DHEALTHREPO:travis-$TRAVIS_BUILD_NUMBER
-      - docker push $DHEALTHREPO
+      - docker push $DHEALTHREPO:$VERSION
+      - docker push $DHEALTHREPO:latest
+      - docker push $DHEALTHREPO:travis-$TRAVIS_BUILD_NUMBER
     - stage: test health docker image
       before_install:
       - sudo apt-get update
