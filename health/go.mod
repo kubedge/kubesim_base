@@ -3,29 +3,28 @@ module github.com/kubedge/kubesim_base/health
 go 1.20
 
 require (
-	github.com/go-openapi/errors v0.17.0
-	github.com/go-openapi/loads v0.17.0
-	github.com/go-openapi/runtime v0.0.0-20180920151709-4f900dc2ade9
-	github.com/go-openapi/spec v0.17.0
-	github.com/go-openapi/strfmt v0.17.0
-	github.com/go-openapi/swag v0.17.0
+	github.com/go-openapi/errors v0.20.3
+	github.com/go-openapi/loads v0.21.2
+	github.com/go-openapi/runtime v0.25.0
+	github.com/go-openapi/spec v0.20.8
+	github.com/go-openapi/strfmt v0.21.3
+	github.com/go-openapi/swag v0.22.3
 	github.com/jessevdk/go-flags v1.5.0
-	golang.org/x/net v0.0.0-20181005035420-146acd28ed58
+	golang.org/x/net v0.8.0
 )
 
 require (
-	github.com/PuerkitoBio/purell v1.1.1 // indirect
-	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
-	github.com/asaskevich/govalidator v0.0.0-20180720115003-f9ffefc3facf // indirect
-	github.com/docker/go-units v0.3.3 // indirect
-	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8 // indirect
-	github.com/go-openapi/analysis v0.18.0 // indirect
-	github.com/go-openapi/jsonpointer v0.18.0 // indirect
-	github.com/go-openapi/jsonreference v0.18.0 // indirect
-	github.com/go-openapi/validate v0.18.0 // indirect
-	github.com/mailru/easyjson v0.0.0-20190312143242-1de009706dbe // indirect
-	github.com/mitchellh/mapstructure v1.1.2 // indirect
-	golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4 // indirect
-	golang.org/x/text v0.3.0 // indirect
-	gopkg.in/yaml.v2 v2.2.2 // indirect
+	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
+	github.com/docker/go-units v0.4.0 // indirect
+	github.com/go-openapi/analysis v0.21.4 // indirect
+	github.com/go-openapi/jsonpointer v0.19.5 // indirect
+	github.com/go-openapi/jsonreference v0.20.0 // indirect
+	github.com/go-openapi/validate v0.21.0 // indirect
+	github.com/josharian/intern v1.0.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mitchellh/mapstructure v1.4.3 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
+	go.mongodb.org/mongo-driver v1.10.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
