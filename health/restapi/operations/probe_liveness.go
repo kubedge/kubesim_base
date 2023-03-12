@@ -29,10 +29,10 @@ func NewProbeLiveness(ctx *middleware.Context, handler ProbeLivenessHandler) *Pr
 	return &ProbeLiveness{Context: ctx, Handler: handler}
 }
 
-/*ProbeLiveness swagger:route GET /liveness probeLiveness
+/*
+ProbeLiveness swagger:route GET /liveness probeLiveness
 
 ProbeLiveness probe liveness API
-
 */
 type ProbeLiveness struct {
 	Context *middleware.Context

@@ -1,16 +1,16 @@
 module github.com/kubedge/kubesim_base/health
 
-go 1.17
+go 1.20
 
 require (
-	github.com/go-openapi/errors v0.19.0
-	github.com/go-openapi/loads v0.19.0
-	github.com/go-openapi/runtime v0.19.0
-	github.com/go-openapi/spec v0.19.0
-	github.com/go-openapi/strfmt v0.19.0
-	github.com/go-openapi/swag v0.19.0
-	github.com/jessevdk/go-flags v1.4.0
-	golang.org/x/net v0.0.0-20190328230028-74de082e2cca
+	github.com/go-openapi/errors v0.17.0
+	github.com/go-openapi/loads v0.17.0
+	github.com/go-openapi/runtime v0.0.0-20180920151709-4f900dc2ade9
+	github.com/go-openapi/spec v0.17.0
+	github.com/go-openapi/strfmt v0.17.0
+	github.com/go-openapi/swag v0.17.0
+	github.com/jessevdk/go-flags v1.5.0
+	golang.org/x/net v0.0.0-20181005035420-146acd28ed58
 )
 
 require (
@@ -25,6 +25,7 @@ require (
 	github.com/go-openapi/validate v0.18.0 // indirect
 	github.com/mailru/easyjson v0.0.0-20190312143242-1de009706dbe // indirect
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
+	golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4 // indirect
 	golang.org/x/text v0.3.0 // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
 )

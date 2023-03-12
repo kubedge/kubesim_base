@@ -14,7 +14,8 @@ import (
 // ProbeReadinessOKCode is the HTTP code returned for type ProbeReadinessOK
 const ProbeReadinessOKCode int = 200
 
-/*ProbeReadinessOK returns a readiness state of the simulator
+/*
+ProbeReadinessOK returns a readiness state of the simulator
 
 swagger:response probeReadinessOK
 */

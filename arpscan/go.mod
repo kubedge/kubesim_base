@@ -1,10 +1,10 @@
 module github.com/kubedge/kubesim_base/arpscan
 
-go 1.17
+go 1.20
 
 require (
-	github.com/google/gopacket v1.1.16
-	gopkg.in/yaml.v2 v2.2.2
+	github.com/google/gopacket v1.1.19
+	gopkg.in/yaml.v2 v2.4.0
 )
 
-require github.com/mdlayher/raw v0.0.0-20211126142749-4eae47f3d54b // indirect
+require golang.org/x/sys v0.0.0-20190412213103-97732733099d // indirect

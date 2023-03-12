@@ -29,10 +29,10 @@ func NewGetConfig(ctx *middleware.Context, handler GetConfigHandler) *GetConfig 
 	return &GetConfig{Context: ctx, Handler: handler}
 }
 
-/*GetConfig swagger:route GET /config getConfig
+/*
+GetConfig swagger:route GET /config getConfig
 
 GetConfig get config API
-
 */
 type GetConfig struct {
 	Context *middleware.Context

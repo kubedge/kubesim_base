@@ -29,10 +29,10 @@ func NewProbeReadiness(ctx *middleware.Context, handler ProbeReadinessHandler) *
 	return &ProbeReadiness{Context: ctx, Handler: handler}
 }
 
-/*ProbeReadiness swagger:route GET /readiness probeReadiness
+/*
+ProbeReadiness swagger:route GET /readiness probeReadiness
 
 ProbeReadiness probe readiness API
-
 */
 type ProbeReadiness struct {
 	Context *middleware.Context

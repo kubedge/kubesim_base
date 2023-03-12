@@ -14,7 +14,8 @@ import (
 // ProbeLivenessOKCode is the HTTP code returned for type ProbeLivenessOK
 const ProbeLivenessOKCode int = 200
 
-/*ProbeLivenessOK returns a liveness state of the simulator
+/*
+ProbeLivenessOK returns a liveness state of the simulator
 
 swagger:response probeLivenessOK
 */

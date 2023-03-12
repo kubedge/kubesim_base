@@ -62,7 +62,7 @@ func (m *EnodeRequest) GetProtocol() string {
 	return ""
 }
 
-//The response message containing the protocol or network
+// The response message containing the protocol or network
 type EPCReply struct {
 	Message              string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -102,7 +102,7 @@ func (m *EPCReply) GetMessage() string {
 	return ""
 }
 
-//This is for request from UE ( bluetooth/wifi )
+// This is for request from UE ( bluetooth/wifi )
 type UERequest struct {
 	Network              string   `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`

@@ -23,13 +23,14 @@ vet-v1: fmt
 	go vet -composites=false -tags=v1 .
 
 # Build the docker image
-build: fmt vet-v1 build-dev build-amd64 build-arm32v7 build-arm64v8
+# build: fmt vet-v1 build-dev build-amd64 build-arm32v7 build-arm64v8
+build: fmt vet-v1 build-dev build-amd64
 
 build-dev:
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/bin/arpscan -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -o build/_output/bin/arpscan -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 .
 
 build-amd64:
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/_output/amd64/arpscan -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=1 go build -o build/_output/amd64/arpscan -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 .
 
 build-arm32v7:
 	GOOS=linux GOARM=7 GOARCH=arm CGO_ENABLED=0 go build -o build/_output/arm32v7/arpscan -gcflags all=-trimpath=${GOPATH} -asmflags all=-trimpath=${GOPATH} -tags=v1 .
