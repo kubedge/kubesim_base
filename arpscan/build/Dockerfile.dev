@@ -1,0 +1,16 @@
+FROM alpine:3.15
+
+ENV OPERATOR=/usr/local/bin/arpscan \
+    USER_UID=1001 \
+    USER_NAME=arpscan
+
+# install operator binary
+COPY build/_output/bin/arpscan ${OPERATOR}
+
+COPY build/bin /usr/local/bin
+
+RUN  /usr/local/bin/user_setup
+
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
+
+USER ${USER_UID}
