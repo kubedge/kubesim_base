@@ -159,6 +159,9 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
-      - uses: golangci/golangci-lint-action@v6
+      # golangci-lint v2 (action v7+): v1.x is built with go < 1.26 and refuses to
+      # lint the module's go 1.26 directive ("language version ... lower than the
+      # targeted Go version"). v2.12.2 is built with go1.26.
+      - uses: golangci/golangci-lint-action@v8
         with:
-          version: v1.61.0
+          version: v2.12.2
