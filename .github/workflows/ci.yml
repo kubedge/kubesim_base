@@ -16,6 +16,7 @@ jobs:
       bash: ${{ steps.detect.outputs.bash }}
       bats: ${{ steps.detect.outputs.bats }}
       go: ${{ steps.detect.outputs.go }}
+      gomodules: ${{ steps.detect.outputs.gomodules }}
     steps:
       - uses: actions/checkout@v6
       - id: detect
@@ -43,6 +44,11 @@ jobs:
           else
             echo "go=false" >> "$GITHUB_OUTPUT"
           fi
+          # Every dir with a go.mod, as a JSON array (this repo is multi-module).
+          # Root becomes ".". The go-build/go-vet/go-test jobs matrix over this.
+          gomodules=$(find . -name go.mod -not -path './.git/*' -exec dirname {} \; \
+            | sed 's|^\./||' | sort | jq -R . | jq -cs .)
+          echo "gomodules=$gomodules" >> "$GITHUB_OUTPUT"
   lint:
     name: lint
     needs: detect
@@ -106,48 +112,63 @@ jobs:
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
             | tar -xz -C /tmp gitleaks
           /tmp/gitleaks detect --source . --redact --verbose
-  # Go / operator jobs — gated on go.mod presence (per go-stack-profile).
-  # All four are skipped on python/bash-only repos (detect.outputs.go == 'false').
+  # Go jobs — gated on go.mod presence (per go-stack-profile). This repo is
+  # multi-module, so go-build/go-vet/go-test run as a matrix over every module
+  # (detect.gomodules); go build/vet/test ./... alone stops at nested go.mod
+  # boundaries and would miss the sub-modules. golangci-lint stays root-only until
+  # the sub-module lint findings are cleaned up (see the multimodule-ci change).
+  # All are skipped on python/bash-only repos (detect.outputs.go == 'false').
   go-build:
     name: go-build
     needs: detect
     if: needs.detect.outputs.go == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJSON(needs.detect.outputs.gomodules) }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-          cache: true
-      # -o /dev/null: this repo's root module has a single `main` package at
-      # cmdrun/, so a plain `go build ./...` emits a `cmdrun` binary into the repo
-      # root and collides with the existing cmdrun/ directory. Discarding the
-      # output keeps this a pure compile check.
-      - run: go build -o /dev/null ./...
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache: false
+      # -o /dev/null: the root module's single `main` package at cmdrun/ would emit
+      # a `cmdrun` binary that collides with the cmdrun/ dir; discarding keeps it a
+      # pure compile check (harmless for the other modules).
+      - run: cd ${{ matrix.module }} && go build -o /dev/null ./...
   go-vet:
     name: go-vet
     needs: detect
     if: needs.detect.outputs.go == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJSON(needs.detect.outputs.gomodules) }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-          cache: true
-      - run: go vet ./...
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache: false
+      - run: cd ${{ matrix.module }} && go vet ./...
   go-test:
     name: go-test
     needs: detect
     if: needs.detect.outputs.go == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJSON(needs.detect.outputs.gomodules) }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-          cache: true
-      - run: go test ./... -race -coverprofile=cover.out
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache: false
+      - run: cd ${{ matrix.module }} && go test ./... -race
   golangci-lint:
     name: golangci-lint
     needs: detect
