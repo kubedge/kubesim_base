@@ -119,7 +119,11 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
-      - run: go build ./...
+      # -o /dev/null: this repo's root module has a single `main` package at
+      # cmdrun/, so a plain `go build ./...` emits a `cmdrun` binary into the repo
+      # root and collides with the existing cmdrun/ directory. Discarding the
+      # output keeps this a pure compile check.
+      - run: go build -o /dev/null ./...
   go-vet:
     name: go-vet
     needs: detect
