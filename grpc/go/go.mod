@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/golang/protobuf v1.5.3
-	github.com/kubedge/kubesim_base/config v0.1.24
+	github.com/kubedge/kubesim_base/config v0.1.25
 	golang.org/x/net v0.5.0
 	google.golang.org/grpc v1.53.0
 )
