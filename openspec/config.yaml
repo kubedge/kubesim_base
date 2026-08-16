@@ -1,20 +1,35 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Role: BASE of the kubedge SIMULATOR family — the shared library the simulators import.
+  NON-STANDARD: this repo publishes MULTIPLE Go modules from one repo (6 go.mod):
+  root, config/, connected/, grpc/go/, health/, arpscan/.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Externally consumed modules (the "modules" consumers depend on):
+    - sim-config       : github.com/kubedge/kubesim_base/config      (Configdata) — shared sim configuration.
+    - sim-connected    : github.com/kubedge/kubesim_base/connected   (Connecteddata) — connection/topology state.
+    - sim-grpc-protocol: github.com/kubedge/kubesim_base/grpc/go     — protobuf RPC contract
+                          (EnodeRequest/EPCReply/UERequest/SIMReply/MME_PDN_CONNECT_MSG …) + client/server.
+                          NOTE internal edge: grpc/go imports config.
+  Internal-only (NOT consumed as libraries by any repo): health/ (a go-swagger REST
+  config/health service, has a binary), arpscan/ (a standalone binary), root.
+
+  Family vs the operators (Notes 15–16): SIM family is LIGHT on Kubernetes (plain Go apps).
+  The operators DEPLOY the sims: an operator's CRD spec fields map 1:1 to a sim's cmd/*
+  components, which are built into per-component images and run on the cluster.
+
+  Tech / build / versioning:
+    - Go, currently go 1.20 (older than operators). Simple apps.
+    - Tag scheme is PLAIN `v0.1.NN` — NO <k8s-version> encoding (unlike operator-base;
+      sims are not k8s-version-bound). Consumers pin sub-modules by tag, e.g.
+      `kubesim_base/config v0.1.24`.
+    - Consumers currently split across cohorts v0.1.24 (sim-ecds/mme, linkio) and v0.1.20
+      (5gc/elte/epc/lte/nr). A realign must tag the consumed sub-modules TOGETHER and fix
+      the internal grpc/go→config edge in lockstep, then move both cohorts to the new tag.
+    - Images: the CONSUMERS build per-component arm64 images via buildx; the base is
+      mostly libraries (buildx applies to the sims, not here).
+
+rules:
+  spec:
+    - Describe CURRENT behavior; do not spec aspirational features.
+    - Treat each consumed sub-module as its own capability.
