@@ -6,6 +6,7 @@
 *.so
 *.dylib
 bin/*
+!bin/*.sh
 */build/_output/*
 Dockerfile.cross
 
