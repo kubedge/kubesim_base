@@ -129,7 +129,7 @@ jobs:
         module: ${{ fromJSON(needs.detect.outputs.gomodules) }}
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache: false
@@ -151,7 +151,7 @@ jobs:
         module: ${{ fromJSON(needs.detect.outputs.gomodules) }}
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache: false
@@ -170,7 +170,7 @@ jobs:
         module: ${{ fromJSON(needs.detect.outputs.gomodules) }}
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache: false
@@ -185,7 +185,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           cache: true
