@@ -133,6 +133,9 @@ jobs:
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache: false
+      - name: system deps for arpscan (gopacket/pcap is cgo)
+        if: matrix.module == 'arpscan'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libpcap-dev
       # -o /dev/null: the root module's single `main` package at cmdrun/ would emit
       # a `cmdrun` binary that collides with the cmdrun/ dir; discarding keeps it a
       # pure compile check (harmless for the other modules).
@@ -152,6 +155,9 @@ jobs:
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache: false
+      - name: system deps for arpscan (gopacket/pcap is cgo)
+        if: matrix.module == 'arpscan'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libpcap-dev
       - run: cd ${{ matrix.module }} && go vet ./...
   go-test:
     name: go-test
@@ -168,6 +174,9 @@ jobs:
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache: false
+      - name: system deps for arpscan (gopacket/pcap is cgo)
+        if: matrix.module == 'arpscan'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libpcap-dev
       - run: cd ${{ matrix.module }} && go test ./... -race
   golangci-lint:
     name: golangci-lint
