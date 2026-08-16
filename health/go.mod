@@ -1,6 +1,6 @@
 module github.com/kubedge/kubesim_base/health
 
-go 1.20
+go 1.26.0
 
 require (
 	github.com/go-openapi/errors v0.20.3

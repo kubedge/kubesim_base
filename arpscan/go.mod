@@ -1,6 +1,6 @@
 module github.com/kubedge/kubesim_base/arpscan
 
-go 1.20
+go 1.26.0
 
 require (
 	github.com/google/gopacket v1.1.19
