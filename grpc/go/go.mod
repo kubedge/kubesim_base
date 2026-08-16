@@ -1,6 +1,6 @@
 module github.com/kubedge/kubesim_base/grpc/go
 
-go 1.20
+go 1.26.0
 
 require (
 	github.com/golang/protobuf v1.5.3
