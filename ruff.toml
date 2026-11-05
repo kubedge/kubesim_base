@@ -1,0 +1,9 @@
+# The claude-meta delivery ships Python 3.14 tooling that runs under `uv run --script`
+# and is linted upstream; keep the project's ruff off it.
+extend-exclude = [
+  ".agents",
+  "plugins",
+  ".claude",
+  "bin/*.py",
+]
+force-exclude = true
