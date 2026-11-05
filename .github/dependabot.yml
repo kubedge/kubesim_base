@@ -37,4 +37,9 @@ updates:
 #    open-pull-requests-limit: 5
 #    ignore:
 #      - dependency-name: "<sibling>" # private ssh source; bumped by hand per release
->>>>>>> 3edfdce (alemax: complete class-M set at 2e1b08a (v0.3.6+, #376-#388) — agent-launcher task 0.5 end-to-end delivery on K8S01 (meta-broadcast update))
+
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
