@@ -33,15 +33,24 @@ DRY_RUN=0
 for a in "$@"; do
   case "$a" in
     --dry-run) DRY_RUN=1 ;;
-    v*)        VERSION="$a" ;;
-    *)         echo "release: unknown arg '$a'" >&2; exit 2 ;;
+    v*) VERSION="$a" ;;
+    *)
+      echo "release: unknown arg '$a'" >&2
+      exit 2
+      ;;
   esac
 done
 
-die()  { echo "release: $*" >&2; exit 1; }
+die() {
+  echo "release: $*" >&2
+  exit 1
+}
 note() { echo ">> $*"; }
-run()  { # execute (or, in dry-run, just print) a command
-  if [[ $DRY_RUN == 1 ]]; then echo "   DRY  $*"; else echo "   RUN  $*"; eval "$*"; fi
+run() { # execute (or, in dry-run, just print) a command
+  if [[ $DRY_RUN == 1 ]]; then echo "   DRY  $*"; else
+    echo "   RUN  $*"
+    eval "$*"
+  fi
 }
 
 [[ -n "$VERSION" ]] || die "usage: bin/release.sh vX.Y.Z [--dry-run]"
@@ -66,18 +75,24 @@ export GOPRIVATE="$MODPATH_ROOT"
 export GOFLAGS="-mod=mod"
 
 # ---- discover modules (parallel arrays: DIRS[i] has module path MODS[i]) --------
-DIRS=(); MODS=()
+DIRS=()
+MODS=()
 while IFS= read -r gm; do
-  d="$(dirname "$gm")"; d="${d#./}"
+  d="$(dirname "$gm")"
+  d="${d#./}"
   m="$(awk 'NR==1{print $2}' "$gm")"
-  DIRS+=("$d"); MODS+=("$m")
+  DIRS+=("$d")
+  MODS+=("$m")
 done < <(find . -name go.mod -not -path './.git/*' -not -path './.local/*' -not -path '*-claude-meta/*' | sort)
 [[ ${#DIRS[@]} -gt 0 ]] || die "no go.mod modules found"
 
 # module path -> dir (linear scan; module count is tiny)
 dir_of_modpath() {
   local want="$1" i
-  for i in "${!MODS[@]}"; do [[ "${MODS[$i]}" == "$want" ]] && { echo "${DIRS[$i]}"; return; }; done
+  for i in "${!MODS[@]}"; do [[ "${MODS[$i]}" == "$want" ]] && {
+    echo "${DIRS[$i]}"
+    return
+  }; done
 }
 
 # in-repo deps of a module dir: dirs it requires (via go.mod require lines)
@@ -86,10 +101,10 @@ deps_of_dir() {
   # module path tokens under our repo root, excluding the module's own line
   grep -oE "${MODPATH_ROOT}(/[A-Za-z0-9._/-]+)?" "$d/go.mod" 2>/dev/null \
     | sort -u | while IFS= read -r tok; do
-        [[ "$tok" == "$(awk 'NR==1{print $2}' "$d/go.mod")" ]] && continue  # skip self
-        dep="$(dir_of_modpath "$tok")"
-        [[ -n "$dep" ]] && echo "$dep"
-      done
+    [[ "$tok" == "$(awk 'NR==1{print $2}' "$d/go.mod")" ]] && continue # skip self
+    dep="$(dir_of_modpath "$tok")"
+    [[ -n "$dep" ]] && echo "$dep"
+  done
 }
 
 # ---- refuse if any target tag already exists (never clobber / re-tag) -----------
@@ -108,14 +123,22 @@ note "releasing $VERSION (current highest: ${highest:-none})  dry_run=$DRY_RUN"
 
 # ---- topological order (Kahn): a module comes after all its in-repo deps --------
 ORDER=()
-emitted() { local x="$1" e; for e in ${ORDER[@]+"${ORDER[@]}"}; do [[ "$e" == "$x" ]] && return 0; done; return 1; }
+emitted() {
+  local x="$1" e
+  for e in ${ORDER[@]+"${ORDER[@]}"}; do [[ "$e" == "$x" ]] && return 0; done
+  return 1
+}
 remaining=("${DIRS[@]}")
 while [[ ${#remaining[@]} -gt 0 ]]; do
-  NEXT=(); made_progress=0
+  NEXT=()
+  made_progress=0
   for d in "${remaining[@]}"; do
     ready=1
     while IFS= read -r dep; do [[ -n "$dep" ]] && ! emitted "$dep" && ready=0; done < <(deps_of_dir "$d")
-    if [[ $ready == 1 ]]; then ORDER+=("$d"); made_progress=1; else NEXT+=("$d"); fi
+    if [[ $ready == 1 ]]; then
+      ORDER+=("$d")
+      made_progress=1
+    else NEXT+=("$d"); fi
   done
   if [[ ${#NEXT[@]} -eq 0 ]]; then remaining=(); else remaining=("${NEXT[@]}"); fi
   [[ $made_progress == 0 && ${#remaining[@]} -gt 0 ]] && die "dependency cycle among modules: ${remaining[*]}"
@@ -131,7 +154,7 @@ for d in "${ORDER[@]}"; do
   changed=0
   while IFS= read -r dep; do
     [[ -z "$dep" ]] && continue
-    deppath="$(awk 'NR==1{print $2}' "$dep/go.mod")"   # module path of the dep dir
+    deppath="$(awk 'NR==1{print $2}' "$dep/go.mod")" # module path of the dep dir
     run "(cd '$d' && go get '${deppath}@${VERSION}')"
     changed=1
   done < <(deps_of_dir "$d")
